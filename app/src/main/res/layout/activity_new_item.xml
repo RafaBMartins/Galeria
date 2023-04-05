@@ -26,7 +26,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
-        android:id="@+id/imbCl"
+        android:id="@+id/imbCI"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -43,11 +43,11 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
+        android:hint="@string/et_Title"
         android:inputType="textPersonName"
-        android:text="@string/et_Title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imbCl" />
+        app:layout_constraintTop_toBottomOf="@+id/imbCI" />
 
     <EditText
         android:id="@+id/etDesc"
@@ -59,8 +59,8 @@
         android:layout_marginBottom="8dp"
         android:ems="10"
         android:gravity="top"
+        android:hint="@string/et_Desc"
         android:inputType="textPersonName"
-        android:text="@string/et_Desc"
         app:layout_constraintBottom_toTopOf="@+id/btnAddItem"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
