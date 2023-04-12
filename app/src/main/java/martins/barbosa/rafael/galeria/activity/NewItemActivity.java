@@ -26,12 +26,16 @@ public class NewItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_item);
 
+        //evento de clique no imagebutton
         ImageButton imgCI = findViewById(R.id.imbCI);
         imgCI.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //intenção implicita para resolver a ação de abrir um documento
                 Intent photoPickerIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                //colocando o tipo do documento como somente imagens
                 photoPickerIntent.setType("image/*");
+                //iniciando a intenção esperando um resultado(URI da foto selecionada)
                 startActivityForResult(photoPickerIntent, PHOTO_PICKER_REQUEST);
             }
         });
@@ -40,6 +44,7 @@ public class NewItemActivity extends AppCompatActivity {
         btnAddItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //da linha 47 até a linha 65 apenas verifico se todos os dados foram preenchidos antes de enviar para MainActivity, se não foram eu aviso o usuario
                 if(photoSelected == null) {
                     Toast.makeText(NewItemActivity.this, "É necessário selecionar uma imagem!", Toast.LENGTH_LONG).show();
                     return;
@@ -59,6 +64,7 @@ public class NewItemActivity extends AppCompatActivity {
                     return;
                 }
 
+                //criando uma intenção e armazenando a foto o titulo e a descrição do item, retornando para MainActivity, com RESULT_OK a intenção que acabamos de criar e finalizando a Activity
                 Intent i = new Intent();
                 i.setData(photoSelected);
                 i.putExtra("title", title);
@@ -72,9 +78,13 @@ public class NewItemActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        //verificamos se o codigo do resultado é o codigo da intenção que pega a URI da foto
         if(requestCode == PHOTO_PICKER_REQUEST) {
+            //vendo se a operação de pegar a foto foi de fato realizada, e não cancelada
             if(resultCode == Activity.RESULT_OK) {
+                //pegando a URI da foto e guardando dentro de um atributo da classe NewItemActivity
                 photoSelected = data.getData();
+                //mostrando a foto no imv do layout de NewItemActivity
                 ImageView imvPhotoPreview = findViewById(R.id.imvPhotoPreview);
                 imvPhotoPreview.setImageURI(photoSelected);
             }
