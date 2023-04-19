@@ -8,23 +8,26 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
 import martins.barbosa.rafael.galeria.R;
 import martins.barbosa.rafael.galeria.adapter.MyAdapter;
 import martins.barbosa.rafael.galeria.model.MyItem;
+import martins.barbosa.rafael.galeria.util.Util;
 
 public class MainActivity extends AppCompatActivity {
 
     static int NEW_ITEM_REQUEST =1;
-    List<MyItem> itens = new ArrayList<>();
     MyAdapter myAdapter;
 
     @Override
@@ -74,7 +77,14 @@ public class MainActivity extends AppCompatActivity {
                 MyItem myItem = new MyItem();
                 myItem.title = data.getStringExtra("title");
                 myItem.description = data.getStringExtra("description");
-                myItem.photo = data.getData();
+                Uri selectedPhotoURI = data.getData();
+
+                try {
+                    Bitmap photo = Util.getBitmap(MainActivity.this,selectedPhotoURI, 100, 100);
+                    myItem.photo = photo;
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
 
                 //armazeno esse item em uma lista de itens, que é um atributo de MainActivity
                 itens.add(myItem);
