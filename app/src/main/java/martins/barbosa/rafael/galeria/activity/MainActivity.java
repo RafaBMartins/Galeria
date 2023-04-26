@@ -2,6 +2,7 @@ package martins.barbosa.rafael.galeria.activity;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +23,7 @@ import java.util.List;
 
 import martins.barbosa.rafael.galeria.R;
 import martins.barbosa.rafael.galeria.adapter.MyAdapter;
+import martins.barbosa.rafael.galeria.model.MainActivityViewModel;
 import martins.barbosa.rafael.galeria.model.MyItem;
 import martins.barbosa.rafael.galeria.util.Util;
 
@@ -48,6 +50,10 @@ public class MainActivity extends AppCompatActivity {
 
         //obtendo o RecyclerView do nosso layout
         RecyclerView rvItens = findViewById(R.id.rvItens);
+
+        //pegando a lista de itens que o ViewModel esta guardando e colocando em uma lista para MainActivity acessar
+        MainActivityViewModel vm = new ViewModelProvider( this ).get(MainActivityViewModel.class);
+        List<MyItem> itens = vm.getItens();
 
         //criando o adptador que sera responsavel por criar e preencher nosso RecyclerView, passamos para o adptador MainActivity(sera usado para criar o inflador) e
         //itens, itens é a lista que preenchemos com os dados retornados de NewItemActivity
@@ -80,13 +86,18 @@ public class MainActivity extends AppCompatActivity {
                 Uri selectedPhotoURI = data.getData();
 
                 try {
+                    //pegando a URI da foto e criando uma imagem Bitmap a partir dela 100x100
                     Bitmap photo = Util.getBitmap(MainActivity.this,selectedPhotoURI, 100, 100);
                     myItem.photo = photo;
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
 
-                //armazeno esse item em uma lista de itens, que é um atributo de MainActivity
+                //pegando a lista de itens que o ViewModel esta guardando
+                MainActivityViewModel vm = new ViewModelProvider( this ).get(MainActivityViewModel.class);
+                List<MyItem> itens = vm.getItens();
+
+                //armazeno esse item em uma lista de itens, que é guardado pela ViewModel
                 itens.add(myItem);
 
                 //notificando o meu adptador que um novo item foi adicionado na lista de itens, assim ele podendo o construir e ser mostrado no RecyclerView

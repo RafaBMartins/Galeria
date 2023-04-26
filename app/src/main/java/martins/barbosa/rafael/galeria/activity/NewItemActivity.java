@@ -2,6 +2,7 @@ package martins.barbosa.rafael.galeria.activity;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -15,16 +16,25 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import martins.barbosa.rafael.galeria.R;
+import martins.barbosa.rafael.galeria.model.NewItemActivityViewModel;
 
 public class NewItemActivity extends AppCompatActivity {
 
     static int PHOTO_PICKER_REQUEST=1;
-    Uri photoSelected = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_item);
+
+
+        NewItemActivityViewModel vm = new ViewModelProvider( this ).get(NewItemActivityViewModel.class);
+        Uri photoSelected = vm.getSelectedPhotoLocation();
+
+        if(photoSelected != null) {
+            ImageView imvfotoPreview = findViewById(R.id.imvPhotoPreview);
+            imvfotoPreview.setImageURI(photoSelected);
+        }
 
         //evento de clique no imagebutton
         ImageButton imgCI = findViewById(R.id.imbCI);
@@ -44,6 +54,8 @@ public class NewItemActivity extends AppCompatActivity {
         btnAddItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Uri photoSelected = vm.getSelectedPhotoLocation();
+
                 //da linha 47 até a linha 65 apenas verifico se todos os dados foram preenchidos antes de enviar para MainActivity, se não foram eu aviso o usuario
                 if(photoSelected == null) {
                     Toast.makeText(NewItemActivity.this, "É necessário selecionar uma imagem!", Toast.LENGTH_LONG).show();
@@ -83,10 +95,13 @@ public class NewItemActivity extends AppCompatActivity {
             //vendo se a operação de pegar a foto foi de fato realizada, e não cancelada
             if(resultCode == Activity.RESULT_OK) {
                 //pegando a URI da foto e guardando dentro de um atributo da classe NewItemActivity
-                photoSelected = data.getData();
+                Uri photoSelected = data.getData();
                 //mostrando a foto no imv do layout de NewItemActivity
                 ImageView imvPhotoPreview = findViewById(R.id.imvPhotoPreview);
                 imvPhotoPreview.setImageURI(photoSelected);
+
+                NewItemActivityViewModel vm = new ViewModelProvider( this ).get(NewItemActivityViewModel.class);
+                vm.setSelectedPhotoLocation(photoSelected);
             }
         }
     }
