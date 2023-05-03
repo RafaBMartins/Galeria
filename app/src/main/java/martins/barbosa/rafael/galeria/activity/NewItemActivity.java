@@ -27,10 +27,11 @@ public class NewItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_item);
 
-
+        //pegando a URI que pode ou não estar guardado no ViewModel
         NewItemActivityViewModel vm = new ViewModelProvider( this ).get(NewItemActivityViewModel.class);
         Uri photoSelected = vm.getSelectedPhotoLocation();
 
+        //se tiver uma URI no ViewModel eu coloco essa foto no ImageView
         if(photoSelected != null) {
             ImageView imvfotoPreview = findViewById(R.id.imvPhotoPreview);
             imvfotoPreview.setImageURI(photoSelected);
@@ -54,6 +55,7 @@ public class NewItemActivity extends AppCompatActivity {
         btnAddItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //se tiver uma URI no ViewModel eu armazeno na variavel photoSelected
                 Uri photoSelected = vm.getSelectedPhotoLocation();
 
                 //da linha 47 até a linha 65 apenas verifico se todos os dados foram preenchidos antes de enviar para MainActivity, se não foram eu aviso o usuario
@@ -100,6 +102,7 @@ public class NewItemActivity extends AppCompatActivity {
                 ImageView imvPhotoPreview = findViewById(R.id.imvPhotoPreview);
                 imvPhotoPreview.setImageURI(photoSelected);
 
+                //colocando a foto no viewModel
                 NewItemActivityViewModel vm = new ViewModelProvider( this ).get(NewItemActivityViewModel.class);
                 vm.setSelectedPhotoLocation(photoSelected);
             }
